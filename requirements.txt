@@ -1,2 +1,4 @@
 jupyter
 google-genai
+gradio
+python-dotenv
