@@ -1,7 +1,7 @@
 import asyncio
 import concurrent.futures
 import time
-from utils.logging_utils import log_marker, log_timestamp
+from utils.logging_utils import log_timestamp
 from utils.gemini_utils import generate_single_image
 
 
