@@ -2,3 +2,4 @@ google-genai==1.7.0
 gradio==5.22.0
 python-dotenv==1.0.1
 setuptools==77.0.3
+sift-stack-py==0.4.2
