@@ -484,25 +484,18 @@ log_marker(f"Outputs will be saved to: {output_directory}", "INFO")
 
 # Create the Gradio Interface
 with gr.Blocks(theme=gr.themes.Soft()) as app:
-    gr.Markdown("# Gemini Image Generation")
+    gr.Markdown("# Gemini AI Image Generator")
     gr.Markdown(
-        "Enter a descriptive prompt and optionally upload reference images to guide the generation. All reference images will be considered together."
+        "Generate high-quality AI images by entering descriptive prompts. Optionally upload reference images to guide the generation style and content."
     )
 
     # Input section
-    with gr.Column():
+    with gr.Column() as input_column:
         prompt = gr.Textbox(
             label="Prompt (What do you want to generate?)",
             placeholder="Describe what image you want to generate, be specific about style, content, and mood...",
             lines=3,
         )
-
-        # Add logging for when user enters a prompt
-        def log_prompt_change(value):
-            print(f"[{datetime.datetime.now()}] User entered prompt: '{value}'")
-            return value
-
-        prompt.change(fn=log_prompt_change, inputs=prompt, outputs=prompt)
 
         num_parallel_runs = gr.Slider(
             minimum=1,
@@ -570,14 +563,6 @@ with gr.Blocks(theme=gr.themes.Soft()) as app:
 
         gr.Examples(examples=example_prompts, inputs=[prompt])
 
-        # Add logging for examples
-        def log_example_selected(example_index, example_data):
-            print(
-                f"[{datetime.datetime.now()}] User selected example {example_index+1}: '{example_data}'"
-            )
-
-        # Note: We can't easily attach event handlers to Examples component in Gradio
-
         generate_btn = gr.Button("Generate Images", variant="primary")
 
         # Add logging for when the button is clicked (this is in addition to the existing logs in generate_wrapper)
@@ -620,7 +605,24 @@ with gr.Blocks(theme=gr.themes.Soft()) as app:
         """
         )
 
+    # Set up the UI interactivity changes
+    def disable_inputs():
+        return [
+            gr.update(interactive=False) for _ in range(6)
+        ]  # For all 6 input components
+
+    def enable_inputs():
+        return [
+            gr.update(interactive=True) for _ in range(6)
+        ]  # For all 6 input components
+
+    # First disable inputs, then run the generation, then re-enable inputs
     generate_btn.click(
+        disable_inputs,
+        None,
+        [prompt, num_parallel_runs, image1, image2, image3, image4],
+        queue=False,
+    ).then(
         generate_wrapper,
         inputs=[prompt, num_parallel_runs, image1, image2, image3, image4],
         outputs=[
@@ -635,6 +637,10 @@ with gr.Blocks(theme=gr.themes.Soft()) as app:
             output_image8,
         ],
         show_progress=True,
+    ).then(
+        enable_inputs,
+        None,
+        [prompt, num_parallel_runs, image1, image2, image3, image4],
     )
 
 
@@ -661,25 +667,18 @@ if __name__ == "__main__":
         )
         # Create a custom app with the specified number of image inputs
         with gr.Blocks(theme=gr.themes.Soft()) as custom_app:
-            gr.Markdown("# Gemini Image Generation")
+            gr.Markdown("# Gemini AI Image Generator")
             gr.Markdown(
-                "Enter a descriptive prompt and optionally upload reference images to guide the generation. All reference images will be considered together."
+                "Generate high-quality AI images by entering descriptive prompts. Optionally upload reference images to guide the generation style and content."
             )
 
             # Input section
-            with gr.Column():
+            with gr.Column() as custom_input_column:
                 prompt = gr.Textbox(
                     label="Prompt (What do you want to generate?)",
                     placeholder="Describe what image you want to generate, be specific about style, content, and mood...",
                     lines=3,
                 )
-
-                # Add logging for when user enters a prompt
-                def log_prompt_change(value):
-                    print(f"[{datetime.datetime.now()}] User entered prompt: '{value}'")
-                    return value
-
-                prompt.change(fn=log_prompt_change, inputs=prompt, outputs=prompt)
 
                 num_parallel_runs = gr.Slider(
                     minimum=1,
@@ -745,14 +744,6 @@ if __name__ == "__main__":
 
                 gr.Examples(examples=example_prompts, inputs=[prompt])
 
-                # Add logging for examples (note: can't easily attach events to Examples)
-                def log_example_selected(example_index, example_data):
-                    print(
-                        f"[{datetime.datetime.now()}] User selected example {example_index+1}: '{example_data}'"
-                    )
-
-                # Note: We can't easily attach event handlers to Examples component in Gradio
-
                 generate_btn = gr.Button("Generate Images", variant="primary")
 
                 # Add logging for when the button is clicked
@@ -797,7 +788,24 @@ if __name__ == "__main__":
                 """
                 )
 
+            # Set up the UI interactivity changes for custom app
+            def disable_custom_inputs():
+                return [
+                    gr.update(interactive=False) for _ in range(2 + args.num_images)
+                ]  # For prompt, slider, and all images
+
+            def enable_custom_inputs():
+                return [
+                    gr.update(interactive=True) for _ in range(2 + args.num_images)
+                ]  # For prompt, slider, and all images
+
+            # First disable inputs, then run the generation, then re-enable inputs
             generate_btn.click(
+                disable_custom_inputs,
+                None,
+                [prompt, num_parallel_runs] + image_inputs,
+                queue=False,
+            ).then(
                 generate_wrapper,
                 inputs=[prompt, num_parallel_runs] + image_inputs,
                 outputs=[
@@ -812,6 +820,10 @@ if __name__ == "__main__":
                     output_image8,
                 ],
                 show_progress=True,
+            ).then(
+                enable_custom_inputs,
+                None,
+                [prompt, num_parallel_runs] + image_inputs,
             )
 
         log_marker(f"Launching custom app with share={args.share}", "START")
