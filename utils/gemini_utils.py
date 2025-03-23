@@ -23,7 +23,7 @@ def initialize_gemini_client():
     if not api_key:
         log_marker("GEMINI_API_KEY environment variable is not set", "ERROR")
         raise ValueError(
-            "GEMINI_API_KEY environment variable is not set. Please set it or create a .env file."
+            "API Key is not set. Please set your Gemini API Key in the 'API Settings' section."
         )
 
     client = genai.Client(api_key=api_key)

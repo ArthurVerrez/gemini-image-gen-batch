@@ -37,12 +37,12 @@ log_system_info()
 output_directory = ensure_output_directory()
 log_marker(f"Outputs will be saved to: {output_directory}", "INFO")
 
-# Ensure API key is available
+# Check for API key - log warning but don't stop application
 api_key = os.environ.get("GEMINI_API_KEY")
 if not api_key:
-    log_marker("GEMINI_API_KEY environment variable is not set", "ERROR")
-    raise ValueError(
-        "GEMINI_API_KEY environment variable is not set. Please set it or create a .env file."
+    log_marker("GEMINI_API_KEY environment variable is not set", "WARNING")
+    log_marker(
+        "You will need to set the API key using the UI before generating images", "INFO"
     )
 else:
     log_marker("API key loaded successfully")
