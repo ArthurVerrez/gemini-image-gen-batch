@@ -1,39 +1,71 @@
-# Gemini Image Generation App
+# Gemini Image Generation Batch
 
-A Gradio web application for generating images using Google's Gemini AI model. This app allows you to:
+A web application that uses Google's Gemini 2.0 Flash experimental image generation model to create images based on text prompts and reference images.
 
-1. Input a text prompt describing what image you want to generate
-2. Optionally upload up to 4 reference images to influence the generation
-3. Generate multiple variants of the same prompt in parallel (up to 8)
-4. View all generated results in a grid layout
+## Features
+
+- Generate multiple images with a single text prompt
+- Optionally include reference images to guide the style and content
+- Run multiple generations in parallel for variations
+- All generated images are automatically saved with timestamped filenames
+
+## Project Structure
+
+The project is organized as follows:
+
+```
+├── app.py                 # Main application entry point
+├── utils/                 # Utility modules
+│   ├── __init__.py        # Package initialization
+│   ├── async_utils.py     # Async operations utilities
+│   ├── file_utils.py      # File and directory utilities
+│   ├── gemini_utils.py    # Gemini API interaction utilities
+│   ├── logging_utils.py   # Logging utilities
+│   └── ui_utils.py        # Gradio UI utilities
+├── outputs/               # Generated images output directory
+├── requirements.txt       # Project dependencies
+└── .env                   # Environment variables (API keys)
+```
 
 ## Setup
 
-1. Install the required packages:
+1. Create a `.env` file with your Gemini API key:
 
-   ```
-   pip install -r requirements.txt
-   ```
+```
+GEMINI_API_KEY=your_api_key_here
+```
 
-2. Set up your Gemini API key:
+2. Install the required packages:
 
-   ```
-   export GEMINI_API_KEY="your_api_key_here"
-   ```
-
-   Or create a `.env` file with:
-
-   ```
-   GEMINI_API_KEY=your_api_key_here
-   ```
+```
+pip install -r requirements.txt
+```
 
 3. Run the application:
 
-   ```
-   python app.py
-   ```
+```
+python app.py
+```
 
-4. Open the provided URL in your browser to use the app.
+For custom number of reference image inputs:
+
+```
+python app.py --num-images 6
+```
+
+To create a shareable link:
+
+```
+python app.py --share
+```
+
+## Usage
+
+1. Enter a detailed text prompt describing the image you want to generate
+2. (Optional) Upload one or more reference images to guide the generation
+3. Set the number of parallel generations (1-8)
+4. Click "Generate Images"
+5. All images will be saved in the "outputs" directory
 
 ## Using the App
 
