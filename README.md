@@ -1,6 +1,6 @@
 # Gemini Image Generation Batch
 
-A web application that uses Google's Gemini 2.0 Flash experimental image generation model to create images based on text prompts and reference images.
+A web application that uses Google's Gemini 2.5 Flash Image generation model to create images based on text prompts and reference images.
 
 ## Features
 
@@ -75,7 +75,7 @@ python app.py --share
 4. Click "Generate Images" to start the process
 5. The generated images will appear below the input form in a grid layout
 
-The app uses Gemini 2.0 Flash experimental image generation model and can generate up to 8 variations simultaneously.
+The app uses Gemini 2.5 Flash Image generation model and can generate up to 8 variations simultaneously.
 
 ## Batch Processing
 
@@ -120,7 +120,7 @@ The app includes several example prompts to get you started. Click on any exampl
 
 ## Limitations
 
-- The Gemini 2.0 model has a maximum context size, so very large images might cause errors
+- The Gemini 2.5 model has a maximum context size, so very large images might cause errors
 - Generation can take a while depending on server load and how many parallel runs you request
 - Running 8 generations simultaneously may be resource-intensive depending on your system
 - The model may occasionally return text responses instead of images for certain prompts

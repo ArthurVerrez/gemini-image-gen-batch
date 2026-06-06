@@ -113,8 +113,8 @@ def get_generation_config():
         top_k=40,
         max_output_tokens=8192,
         response_modalities=[
-            "image",
-            "text",
+            "IMAGE",
+            "TEXT",
         ],
         safety_settings=[
             types.SafetySetting(
@@ -122,7 +122,6 @@ def get_generation_config():
                 threshold="OFF",  # Off
             ),
         ],
-        response_mime_type="text/plain",
     )
 
 
@@ -158,7 +157,7 @@ def generate_single_image(prompt, uploaded_images, output_directory, run_number=
         # Upload the input images if provided
         files = upload_reference_images(client, uploaded_images, run_number)
 
-        model = "gemini-2.0-flash-exp-image-generation"
+        model = "gemini-2.5-flash-image"
         log_timestamp(f"Task {run_number}: Using model: {model}")
 
         # Build the content parts
